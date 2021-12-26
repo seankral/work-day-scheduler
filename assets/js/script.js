@@ -25,16 +25,22 @@ var createTimeBlocks = function(event) {
         .text(timeBlocks[i])
         $($div).append($p)
 
-        var $input = $("<input>").attr({type: "text", class: "time-block"})
+        var $input = $("<input>").attr({type: "text", class: "time-block", data: [i]})
         $($div).append($input)
 
-        var $btn = $("<input>").attr({id: "save", type: "submit", class: "saveBtn"})
+        var $btn = $("<input>").attr({id: "save", type: "submit", class: "saveBtn", data: [i]})
         $($div).append($btn)
     }
     
     $(".container").on("click", "#save", function(event) {
-        var inputVal = {
-            inputValue: $('.time-block').val()
+        //console.log($(this).attr("data"))
+        if ($(this).attr("data") === $('.time-block').attr("data")) {
+            var inputVal = {
+                inputValue: $('.time-block').val(),
+                dataId: $('.time-block').attr('data')
+        }
+
+        
         }
         event.preventDefault();
         saveInput(inputVal)
@@ -42,9 +48,30 @@ var createTimeBlocks = function(event) {
 }
 
 var saveInput = function(input) {
-    tasks.push(input)
-    console.log(tasks)
+    console.log(input)
+    
+    if (localStorage.getItem('tasks') === null) {
+        var inputVal = {
+            task: input
+        };
+        tasks.push(inputVal)
+        localStorage.setItem("tasks", JSON.stringify(tasks))
+    }
+    else {
+        tasks = localStorage.getItem('tasks')
+
+        tasks = JSON.parse(tasks)
+
+        var inputVal = {
+            input: input
+        }
+        tasks.push(inputVal)
+        localStorage.setItem('tasks', JSON.stringify(tasks))
+    }
+    
 }
+
+
 
 createTimeBlocks();
 
