@@ -13,6 +13,9 @@ while (startTime <= endTime) {
 $("#currentDay").text(moment().format("dddd, MMMM Do"))
 
 var createTimeBlocks = function(event) {
+
+    tasks = JSON.parse(localStorage.getItem("tasks"))
+
     for ( var i = 0; i < timeBlocks.length; i++) {
 
         var $form = $("<form>").attr({data: i})
@@ -22,19 +25,15 @@ var createTimeBlocks = function(event) {
         $($form).append($div)
 
         var $p = $("<p>", {"class": "hour"})
-        .text(timeBlocks[i])
+       .text(timeBlocks[i])
         $($div).append($p)
 
-        var $input = $("<input>").attr({type: "text", class: "time-block"})
+        var $input = $("<input>").attr({value: tasks[i].task.inputValue, type: "text", class: "time-block"})
         $($div).append($input)
 
         var $btn = $("<input>").attr({id: "save", type: "submit", class: "saveBtn", data: i})
         $($div).append($btn)
     }
-
-    debugger;
-
-    loadTasks();
     
     $(".container").on("click", "#save", function(event) {
         
@@ -70,12 +69,6 @@ var saveInput = function(input, dataId) {
     }
     
 }
-
-var loadTasks = function() {
-    tasks = JSON.parse(localStorage.getItem("tasks"))
-    console.log(tasks)
-}
-
 
 createTimeBlocks();
 
