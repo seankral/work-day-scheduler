@@ -16,6 +16,8 @@ var createTimeBlocks = function(event) {
 
     tasks = JSON.parse(localStorage.getItem("tasks"))
 
+    console.log(tasks)
+
     for ( var i = 0; i < timeBlocks.length; i++) {
 
         var $form = $("<form>").attr({data: i})
@@ -28,8 +30,13 @@ var createTimeBlocks = function(event) {
        .text(timeBlocks[i])
         $($div).append($p)
 
-        var $input = $("<input>").attr({value: tasks[i].task.inputValue, type: "text", class: "time-block"})
-        $($div).append($input)
+        if (tasks !== null) {
+            var $input = $("<input>").attr({value: tasks[i], type: "text", class: "time-block"})
+            $($div).append($input)
+        } else {
+            var $input = $("<input>").attr({type: "text", class: "time-block"})
+            $($div).append($input)
+        }
 
         var $btn = $("<input>").attr({id: "save", type: "submit", class: "saveBtn", data: i})
         $($div).append($btn)
@@ -47,13 +54,13 @@ var createTimeBlocks = function(event) {
 }
 
 var saveInput = function(input, dataId) {
-    console.log(tasks[dataId])
-    
+    //console.log(tasks[dataId])
+    if (tasks === null) {
+        tasks = ["", "", "", "", "", "", "", "", ""]
+    }
+
     if (localStorage.getItem('tasks') === null) {
-        var inputVal = {
-            task: input
-        };
-        tasks[dataId] = inputVal;
+        tasks[dataId] = input.inputValue;
         localStorage.setItem("tasks", JSON.stringify(tasks))
     }
     else {
@@ -61,10 +68,8 @@ var saveInput = function(input, dataId) {
 
         tasks = JSON.parse(tasks)
 
-        var inputVal = {
-            task: input
-        }
-        tasks[dataId] = inputVal;
+
+        tasks[dataId] = input.inputValue;
         localStorage.setItem('tasks', JSON.stringify(tasks))
     }
     
